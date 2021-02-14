@@ -1,0 +1,24 @@
+# Message types
+MESSAGE_SYS_HEARTBEAT = b'\x00'
+MESSAGE_SYS_GPS = b'\x01'
+MESSAGE_USR_TEXT = b'\x10'
+MESSAGE_MESH_CANCEL = b'\xF0'
+
+# Network types
+NETWORK_DIRECT = b'\x00'
+NETWORK_MESH = b'\x10'
+
+# Message priority
+PRIORITY_URGENT = b'\xFF'
+PRIORITY_HIGH = b'\x80'
+PRIORITY_REGULAR = b'\x40'
+PRIORITY_LOW = b'\x00'
+
+# Message format
+FORMAT_RAW = b'\x00'
+FORMAT_UTF8 = b'\x01'
+
+# Mesh Routes
+ROUTING_DIRECT = b'\x00\x00\x00'
+ROUTING_MULTICAST = b'\xFF\xFF\xFF'
+ROUTING_PROVISIONING = b'\x99\x99\x99'
