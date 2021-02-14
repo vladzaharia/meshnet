@@ -1,3 +1,3 @@
 NODE = b'\x01'
 GATEWAY = b'\x10'
-NON_ROUTING_TEST = b'\xFF'
+SPECIAL_NON_ROUTING = b'\xFF'
