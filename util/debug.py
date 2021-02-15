@@ -22,14 +22,11 @@ from meshnet.heartbeat import (
     node_type
 )
 from util.headers import Headers
-from util.message import (
-    content, 
-    headers
-)
+from util.message import Message
 
-def dbg(message: bytearray):
-    headers_var = Headers().from_bytearray(headers(message))
-    content_var = content(message)
+def dbg(message: Message):
+    headers_var = message.headers
+    content_var = message.content
 
     message_type_var = headers_var.message_type
 

@@ -1,5 +1,5 @@
+from constants.headers import ROUTING_PROVISIONING
 from constants.node_types import SPECIAL_NON_ROUTING
-from util.headers import ROUTING_PROVISIONING
 
 NODE_ID = ROUTING_PROVISIONING
 NODE_TYPE = SPECIAL_NON_ROUTING

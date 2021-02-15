@@ -1,45 +1,26 @@
-from constants.headers import (
-    FORMAT_RAW, 
-    FORMAT_UTF8
-)
 from util.headers import Headers
 
-def create_raw(message_type: bytes, 
-                network: bytes, 
-                priority: bytes,
-                sender: bytes,
-                mrh: bytes,
-                recipient: bytes,
-                content: bytes):
-    content_len = len(content)
+class Message:
+    headers: Headers
+    content: bytes
 
-    message = bytearray(content_len)
-    message[0:15] = Headers(message_type, network, priority, FORMAT_RAW, sender, mrh, recipient).create()
-    message[16:] = content
+    def __init__(self, headers = Headers(), content: bytes = b'') -> None:
+        self.headers = headers
+        self.content = content
 
-    return message
+    @classmethod
+    def from_utf8(self, headers = Headers(), content: str = ""):
+        content_as_bytes = bytes(content, "utf-8")
+        return self(headers, content_as_bytes)
 
-def create_utf8(message_type: bytes, 
-                network: bytes, 
-                priority: bytes,
-                sender: bytes,
-                mrh: bytes,
-                recipient: bytes,
-                content: str):
-    content_as_bytes = bytes(content, "utf-8")
+    @classmethod
+    def from_bytearray(self, message: bytearray):
+        headers = Headers().from_bytearray(message[0:16])
+        content = message[16:]
+        return self(headers, content)
 
-    message = create_raw(message_type, network, priority, sender, mrh, recipient, content_as_bytes)
-    message[3:3] = FORMAT_UTF8
-    
-    return message
-
-def headers(message: bytearray):
-    headers_var = bytearray(16)
-    headers_var[0:16] = message[0:16]
-    return headers_var
-
-def content(message: bytearray):
-    content_len = len(message) - 16
-    content_var = bytearray(content_len)
-    content_var[0:content_len] = message[16:]
-    return content_var
+    def create(self):
+        message = bytearray(len(self.content) + 16)
+        message[0:15] = self.headers.create()
+        message[16:] = self.content
+        return message

@@ -1,21 +1,25 @@
 from constants.globals import *;
 from constants.headers import (
-    MESSAGE_SYS_HEARTBEAT, 
+    FORMAT_RAW, MESSAGE_SYS_HEARTBEAT, 
     NETWORK_DIRECT, 
     PRIORITY_LOW, 
     ROUTING_DIRECT, 
     ROUTING_MULTICAST
 );
-from util.message import create_raw;
+from util.message import Message;
+from util.headers import Headers
 
 def create_heartbeat():
-    return create_raw(MESSAGE_SYS_HEARTBEAT, 
-                        NETWORK_DIRECT, 
-                        PRIORITY_LOW, 
-                        NODE_ID,
-                        ROUTING_DIRECT,
-                        ROUTING_MULTICAST,
-                        create_heartbeat_content(NODE_ID, NODE_TYPE, enumerate_routes()))
+    headers = Headers(MESSAGE_SYS_HEARTBEAT,
+                      NETWORK_DIRECT,
+                      PRIORITY_LOW,
+                      FORMAT_RAW,
+                      NODE_ID,
+                      ROUTING_DIRECT,
+                      ROUTING_MULTICAST)
+    message = Message(headers, create_heartbeat_content(NODE_ID, NODE_TYPE, enumerate_routes()))
+    return message
+                        
 
 def create_heartbeat_content(self: bytes, node_type: bytes, routes):
     message_len = len(routes) + 8
