@@ -97,9 +97,11 @@ def frmt_dbg(header: Headers):
 def heartbeat_dbg(message: bytearray):
     heartbeat = Heartbeat().from_bytearray(message)
     print("# Heartbeat Debug #")
-    print("ID: {0}".format(heartbeat.node_id))
+    print("ID: {0}".format(bytes(heartbeat.node_id)))
     print("Node Type: {0}".format(node_type_dbg(heartbeat.node_type)))
-    print("Neighbors: {0}".format(heartbeat.routes))
+    print("Time: {0}".format(heartbeat.timestamp.strftime("%c")))
+    print("Neighbors:")
+    neighbors_dbg(heartbeat.routes)
 
 def node_type_dbg(node_type_var: bytes):
     if (node_type_var == TYPE_NODE):
@@ -111,9 +113,15 @@ def node_type_dbg(node_type_var: bytes):
     else:
         return "Unknown"
 
+def neighbors_dbg(routes: bytearray):
+    num_routes = int(len(routes) / 3)
+    for i in range(0, num_routes):
+        print(bytes(routes[i*3:(i*3)+3]))
+
 def routing_dbg():
     routing = Routing()
     
+    print()
     print("# Routing Debug #")
     print_routes(routing.neighbors)
 
