@@ -1,5 +1,0 @@
-from constants.headers import ROUTING_PROVISIONING
-from constants.nodes import TYPE_NON_ROUTING
-
-NODE_ID = ROUTING_PROVISIONING
-NODE_TYPE = TYPE_NON_ROUTING

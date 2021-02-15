@@ -1,24 +1,25 @@
 from datetime import datetime, timedelta
 
-from constants.nodes import TYPE_GATEWAY, TYPE_NODE, TYPE_NON_ROUTING
+from constants.nodetype import TYPE_NON_ROUTING
+from util.nodetype import NodeType
 
 TIMEOUT_NODE = 5
 TIMEOUT_GATEWAY = 15
 
 class RoutingEntry:
     node_id: bytes
-    node_type: bytes
+    node_type: NodeType
     expiry: datetime
 
-    def __init__(self, node_id, node_type) -> None:
+    def __init__(self, node_id: bytes, node_type: NodeType) -> None:
         self.node_id = node_id
-        self.node_type = node_type
+        self.node_type = NodeType(node_type)
 
         if (node_type == TYPE_NON_ROUTING):
             raise Exception("Cannot create RoutingEntry for non-routing node")
-        elif (node_type == TYPE_NODE):
+        elif (self.node_type.is_node()):
             self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_NODE)
-        elif (node_type == TYPE_GATEWAY):
+        elif (self.node_type.is_gateway()):
             self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_GATEWAY)
 
 class Routing:
@@ -37,10 +38,10 @@ class Routing:
         self.neighbors.append(entry)
     
     def node_neighbors(self):
-        return filter(lambda n: n.node_type == TYPE_NODE, self.neighbors)
+        return filter(lambda n: n.node_type.is_node(), self.neighbors)
 
     def node_gateways(self):
-        return filter(lambda n: n.node_type == TYPE_GATEWAY, self.neighbors)
+        return filter(lambda n: n.node_type.is_gateway(), self.neighbors)
     
     def clean(self):
         neighbors_to_clean = list()

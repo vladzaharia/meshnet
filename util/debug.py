@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from time import sleep
+from util.nodetype import NodeType
 
 from meshnet.routing import Routing, RoutingEntry
 from constants.headers import (
@@ -16,8 +17,8 @@ from constants.headers import (
     PRIORITY_REGULAR, 
     PRIORITY_URGENT
 )
-from constants.nodes import (
-    TYPE_GATEWAY, 
+from constants.nodetype import (
+    TYPE_GATEWAY, TYPE_GATEWAY_TIME, 
     TYPE_NODE, 
     TYPE_NON_ROUTING
 )
@@ -98,20 +99,15 @@ def heartbeat_dbg(message: bytearray):
     heartbeat = Heartbeat().from_bytearray(message)
     print("# Heartbeat Debug #")
     print("ID: {0}".format(bytes(heartbeat.node_id)))
-    print("Node Type: {0}".format(node_type_dbg(heartbeat.node_type)))
-    print("Time: {0}".format(heartbeat.timestamp.strftime("%c")))
+    node_type_dbg(heartbeat.node_type)
+    print("Timestamp: {0}".format(heartbeat.timestamp.strftime("%c")))
     print("Neighbors:")
     neighbors_dbg(heartbeat.routes)
 
-def node_type_dbg(node_type_var: bytes):
-    if (node_type_var == TYPE_NODE):
-        return "Node"
-    elif (node_type_var == TYPE_GATEWAY):
-        return "Gateway"
-    elif (node_type_var == TYPE_NON_ROUTING):
-        return "SPECIAL - Non-Routing Node"
-    else:
-        return "Unknown"
+def node_type_dbg(node_type: NodeType):
+    print("Node Type: {0}".format(node_type.to_string()))
+    print("  Is Node? {0}".format(node_type.is_node()))
+    print("  Is Gateway? {0}".format(node_type.is_gateway()))
 
 def neighbors_dbg(routes: bytearray):
     num_routes = int(len(routes) / 3)
@@ -137,6 +133,6 @@ def routing_dbg():
 
 def print_routes(routes: list[RoutingEntry]):
     for neighbor in routes:
-        print("ID: {0}, Type: {1}, Expiry: {2}".format(neighbor.node_id, node_type_dbg(neighbor.node_type), neighbor.expiry.strftime("%c")))
+        print("ID: {0}, Type: {1}, Expiry: {2}".format(neighbor.node_id, neighbor.node_type.to_string(), neighbor.expiry.strftime("%c")))
 
 

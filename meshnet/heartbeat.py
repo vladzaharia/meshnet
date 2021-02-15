@@ -1,33 +1,34 @@
 from datetime import datetime
 import struct
 
-from meshnet.routing import Routing
-from constants.globals import *;
 from constants.headers import (
     FORMAT_RAW, MESSAGE_SYS_HEARTBEAT, 
     NETWORK_DIRECT, 
     PRIORITY_LOW, 
     ROUTING_DIRECT, 
     ROUTING_MULTICAST
-);
-from util.message import Message;
+)
+from meshnet.routing import Routing, RoutingEntry
+from meshnet.self import Self
 from util.headers import Headers
+from util.message import Message
+from util.nodetype import NodeType
 
 class Heartbeat:
     node_id: bytes
-    node_type: bytes
+    node_type: NodeType
     headers: Headers
     routes: bytearray
     timestamp: datetime
 
-    def __init__(self, node_id: bytes = b'\x00\x00\x00', node_type: bytes = b'') -> None:
+    def __init__(self, node_id: bytes = Self().node_id, node_type: NodeType = Self().node_type) -> None:
         self.node_id = node_id
         self.node_type = node_type
         self.headers = Headers(MESSAGE_SYS_HEARTBEAT,
                                 NETWORK_DIRECT,
                                 PRIORITY_LOW,
                                 FORMAT_RAW,
-                                NODE_ID,
+                                self.node_id,
                                 ROUTING_DIRECT,
                                 ROUTING_MULTICAST)
         self.timestamp = datetime.now()
@@ -35,7 +36,7 @@ class Heartbeat:
 
     @classmethod
     def from_bytearray(self, raw: bytearray):
-        obj = self(raw[0:3], raw[3:4])
+        obj = self(raw[0:3], NodeType(raw[3:4]))
         obj.set_time(raw[4:8])
         obj.routes = raw[8:]
         return obj
@@ -48,7 +49,7 @@ class Heartbeat:
         message = bytearray(message_len)
 
         message[0:2] = self.node_id
-        message[3:3] = self.node_type
+        message[3:3] = self.node_type.node_type
         message[4:8] = self.get_time()
         message[8:] = routes
 
@@ -74,3 +75,6 @@ class Heartbeat:
     def set_time(self, timestamp_raw: bytearray):
         timestamp = struct.unpack(">i", timestamp_raw)
         self.timestamp = datetime.fromtimestamp(float(timestamp[0]))
+
+def proccess_heartbeat(heartbeat: Heartbeat):
+    Routing().add(RoutingEntry(heartbeat.node_id, heartbeat.node_type))
