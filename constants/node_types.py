@@ -1,3 +1,0 @@
-NODE = b'\x01'
-GATEWAY = b'\x10'
-SPECIAL_NON_ROUTING = b'\xFF'

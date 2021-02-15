@@ -1,0 +1,3 @@
+TYPE_NODE = b'\x01'
+TYPE_GATEWAY = b'\x10'
+TYPE_NON_ROUTING = b'\xFF'

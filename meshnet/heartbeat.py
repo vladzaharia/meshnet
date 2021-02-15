@@ -1,3 +1,4 @@
+from meshnet.routing import Routing
 from constants.globals import *;
 from constants.headers import (
     FORMAT_RAW, MESSAGE_SYS_HEARTBEAT, 
@@ -9,36 +10,51 @@ from constants.headers import (
 from util.message import Message;
 from util.headers import Headers
 
-def create_heartbeat():
-    headers = Headers(MESSAGE_SYS_HEARTBEAT,
-                      NETWORK_DIRECT,
-                      PRIORITY_LOW,
-                      FORMAT_RAW,
-                      NODE_ID,
-                      ROUTING_DIRECT,
-                      ROUTING_MULTICAST)
-    message = Message(headers, create_heartbeat_content(NODE_ID, NODE_TYPE, enumerate_routes()))
-    return message
-                        
+class Heartbeat:
+    node_id: bytes
+    node_type: bytes
+    headers: Headers
+    routes: bytearray
 
-def create_heartbeat_content(self: bytes, node_type: bytes, routes):
-    message_len = len(routes) + 8
-    message = bytearray(message_len)
+    def __init__(self, node_id: bytes = b'\x00\x00\x00', node_type: bytes = b'') -> None:
+        self.node_id = node_id
+        self.node_type = node_type
+        self.headers = Headers(MESSAGE_SYS_HEARTBEAT,
+                                NETWORK_DIRECT,
+                                PRIORITY_LOW,
+                                FORMAT_RAW,
+                                NODE_ID,
+                                ROUTING_DIRECT,
+                                ROUTING_MULTICAST)
+        self.routes = bytearray()
 
-    message[0:2] = self
-    message[3:3] = node_type
+    @classmethod
+    def from_bytearray(self, raw: bytearray):
+        obj = self(raw[0:3], raw[3:4])
+        obj.routes = raw[8:]
+        return obj
 
-    # 4 - 7 reserved
+    def create(self):
+        self.create_routes()
 
-    message[8:message_len-1] = routes
+        routes = self.routes
+        message_len = len(routes) + 8
+        message = bytearray(message_len)
 
-    return message
+        message[0:2] = self.node_id
+        message[3:3] = self.node_type
+        # 4 - 7 reserved
+        message[8:] = routes
 
-def enumerate_routes():
-    return b''
+        return Message(self.headers, message)
 
-def node_id(message: bytearray):
-    return bytes(message[0:3])
+    def create_routes(self):
+        routing = Routing()
+        neighbors = routing.neighbors
 
-def node_type(message: bytearray):
-    return bytes(message[3:4])
+        self.routes = bytearray(len(neighbors) * 3)
+        i = 0
+
+        for neighbor in routing.neighbors:
+            self.routes[i:i+3] = neighbor.node_id
+            i = i + 3

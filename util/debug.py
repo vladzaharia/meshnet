@@ -12,15 +12,12 @@ from constants.headers import (
     PRIORITY_REGULAR, 
     PRIORITY_URGENT
 )
-from constants.node_types import (
-    GATEWAY, 
-    NODE, 
-    SPECIAL_NON_ROUTING
+from constants.nodes import (
+    TYPE_GATEWAY, 
+    TYPE_NODE, 
+    TYPE_NON_ROUTING
 )
-from meshnet.heartbeat import (
-    node_id, 
-    node_type
-)
+from meshnet.heartbeat import Heartbeat
 from util.headers import Headers
 from util.message import Message
 
@@ -92,17 +89,19 @@ def frmt_dbg(header: Headers):
         return "UTF-8"
 
 def heartbeat_dbg(message: bytearray):
+    heartbeat = Heartbeat().from_bytearray(message)
     print("# Heartbeat Debug #")
-    print("ID: {0}".format(node_id(message)))
-    print("Node Type: {0}".format(node_type_dbg(message)))
+    print("ID: {0}".format(heartbeat.node_id))
+    print("Node Type: {0}".format(node_type_dbg(heartbeat)))
+    print("Neighbors: {0}".format(heartbeat.routes))
 
-def node_type_dbg(message: bytearray):
-    node_type_var = node_type(message)
-    if (node_type_var == NODE):
+def node_type_dbg(heartbeat: Heartbeat):
+    node_type_var = heartbeat.node_type
+    if (node_type_var == TYPE_NODE):
         return "Node"
-    elif (node_type_var == GATEWAY):
+    elif (node_type_var == TYPE_GATEWAY):
         return "Gateway"
-    elif (node_type_var == SPECIAL_NON_ROUTING):
+    elif (node_type_var == TYPE_NON_ROUTING):
         return "SPECIAL - Non-Routing Node"
     else:
         return "Unknown"
