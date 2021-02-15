@@ -1,6 +1,11 @@
-from constants.node_types import GATEWAY, NODE
 from constants.globals import *;
-from constants.headers import MESSAGE_SYS_HEARTBEAT, NETWORK_DIRECT, PRIORITY_LOW, ROUTING_DIRECT, ROUTING_MULTICAST;
+from constants.headers import (
+    MESSAGE_SYS_HEARTBEAT, 
+    NETWORK_DIRECT, 
+    PRIORITY_LOW, 
+    ROUTING_DIRECT, 
+    ROUTING_MULTICAST
+);
 from util.message import create_raw;
 
 def create_heartbeat():

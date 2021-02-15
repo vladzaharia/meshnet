@@ -1,15 +1,37 @@
-from constants.node_types import GATEWAY, NODE, SPECIAL_NON_ROUTING
-from constants.globals import NODE_TYPE
-from constants.headers import FORMAT_RAW, FORMAT_UTF8, MESSAGE_MESH_CANCEL, MESSAGE_SYS_GPS, MESSAGE_SYS_HEARTBEAT, MESSAGE_USR_TEXT, NETWORK_DIRECT, NETWORK_MESH, PRIORITY_HIGH, PRIORITY_LOW, PRIORITY_REGULAR, PRIORITY_URGENT
-from meshnet.heartbeat import node_id, node_type
-from util.headers import frmt, message_type, mrh, network, priority, recipient, sender
-from util.message import content, headers
+from constants.headers import (
+    FORMAT_RAW, 
+    FORMAT_UTF8, 
+    MESSAGE_MESH_CANCEL, 
+    MESSAGE_SYS_GPS, 
+    MESSAGE_SYS_HEARTBEAT, 
+    MESSAGE_USR_TEXT, 
+    NETWORK_DIRECT, 
+    NETWORK_MESH, 
+    PRIORITY_HIGH, 
+    PRIORITY_LOW, 
+    PRIORITY_REGULAR, 
+    PRIORITY_URGENT
+)
+from constants.node_types import (
+    GATEWAY, 
+    NODE, 
+    SPECIAL_NON_ROUTING
+)
+from meshnet.heartbeat import (
+    node_id, 
+    node_type
+)
+from util.headers import Headers
+from util.message import (
+    content, 
+    headers
+)
 
 def dbg(message: bytearray):
-    headers_var = headers(message)
+    headers_var = Headers().from_bytearray(headers(message))
     content_var = content(message)
 
-    message_type_var = message_type(headers_var)
+    message_type_var = headers_var.message_type
 
     headers_dbg(headers_var)
     print()
@@ -20,7 +42,7 @@ def dbg(message: bytearray):
     if (message_type_var == MESSAGE_SYS_HEARTBEAT):
         heartbeat_dbg(content_var)
 
-def headers_dbg(header: bytearray):
+def headers_dbg(header: Headers):
     print("# Header Debug #")
     print(header)
     print("Type: {0}".format(message_type_dbg(header)))
@@ -28,12 +50,12 @@ def headers_dbg(header: bytearray):
     print("Priority: {0}".format(priority_dbg(header)))
     print("Content Format: {0}".format(frmt_dbg(header)))
     print("---")
-    print("Sender: {0}".format(sender(header)))
-    print("Recipient: {0}".format(recipient(header)))
-    print("Route Hint: {0}".format(mrh(header)))
+    print("Sender: {0}".format(header.sender))
+    print("Recipient: {0}".format(header.recipient))
+    print("Route Hint: {0}".format(header.mrh))
 
-def message_type_dbg(header: bytearray):
-    message_type_var = message_type(header)
+def message_type_dbg(header: Headers):
+    message_type_var = header.message_type
     if (message_type_var == MESSAGE_SYS_HEARTBEAT):
         return "Sys - Heartbeat"
     elif (message_type_var == MESSAGE_SYS_GPS):
@@ -45,16 +67,16 @@ def message_type_dbg(header: bytearray):
     else:
         return "Unknown"
 
-def network_dbg(header: bytearray):
-    network_var = network(header)
+def network_dbg(header: Headers):
+    network_var = header.network
     if (network_var == NETWORK_DIRECT):
         return "LoRa Direct"
     elif (network_var == NETWORK_MESH):
         return "LoRa Mesh"
     return "Unknown"
 
-def priority_dbg(header: bytearray):
-    priority_var = priority(header)
+def priority_dbg(header: Headers):
+    priority_var = header.priority
     if (priority_var == PRIORITY_URGENT):
         return "Urgent"
     elif (priority_var == PRIORITY_HIGH):
@@ -65,8 +87,8 @@ def priority_dbg(header: bytearray):
         return "Low"
     return "Unknown"
 
-def frmt_dbg(header: bytearray):
-    frmt_var = frmt(header)
+def frmt_dbg(header: Headers):
+    frmt_var = header.frmt
     if (frmt_var == FORMAT_RAW):
         return "Raw"
     elif (frmt_var == FORMAT_UTF8):

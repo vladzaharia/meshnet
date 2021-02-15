@@ -1,7 +1,9 @@
-from util.headers import create as create_header, message_type
-from constants.headers import FORMAT_RAW, FORMAT_UTF8;
+from constants.headers import (
+    FORMAT_RAW, 
+    FORMAT_UTF8
+)
+from util.headers import Headers
 
-# ABCD ZZZ EEE FFF GGG H…
 def create_raw(message_type: bytes, 
                 network: bytes, 
                 priority: bytes,
@@ -12,7 +14,7 @@ def create_raw(message_type: bytes,
     content_len = len(content)
 
     message = bytearray(content_len)
-    message[0:15] = create_header(message_type, network, priority, FORMAT_RAW, sender, mrh, recipient)
+    message[0:15] = Headers(message_type, network, priority, FORMAT_RAW, sender, mrh, recipient).create()
     message[16:] = content
 
     return message

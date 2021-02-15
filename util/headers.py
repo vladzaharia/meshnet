@@ -1,44 +1,46 @@
-def create(message_type: bytes, 
-            network: bytes, 
-            priority: bytes,
-            format: bytes,
-            sender: bytes,
-            mrh: bytes,
-            recipient: bytes):
-    header = bytearray(16)
+class Headers:
+    message_type: bytes
+    network: bytes
+    priority: bytes
+    frmt: bytes
+    sender: bytes
+    mrh: bytes
+    recipient: bytes
 
-    # Set routing fields
-    header[0:0] = message_type
-    header[1:1] = network
-    header[2:2] = priority
-    header[3:3] = format
-
-    # 4 5 6 = reserved
-
-    # Set sender, mrh, recipient
-    header[7:9] = sender
-    header[10:12] = mrh
-    header[13:15] = recipient
-
-    return header
-
-def message_type(header: bytearray):
-    return bytes(header[0:1])
+    def __init__(self, 
+        message_type: bytes = b'', 
+        network: bytes = b'', 
+        priority: bytes = b'', 
+        frmt: bytes = b'', 
+        sender: bytes = b'\x00\x00\x00', 
+        mrh: bytes = b'\x00\x00\x00', 
+        recipient: bytes = b'\x00\x00\x00'):
+        self.message_type = message_type
+        self.network = network
+        self.priority = priority
+        self.frmt = frmt
+        self.sender = sender
+        self.mrh = mrh
+        self.recipient = recipient
     
-def network(header: bytearray):
-    return bytes(header[1:2])
-    
-def priority(header: bytearray):
-    return bytes(header[2:3])
-    
-def frmt(header: bytearray):
-    return bytes(header[3:4])
+    @classmethod
+    def from_bytearray(self, raw: bytearray):
+        return self(raw[0:1], raw[1:2], raw[2:3], raw[3:4], raw[7:10], raw[10:13], raw[13:16])
 
-def sender(header: bytearray):
-    return bytes(header[7:10])
+    def create(self):
+        header = bytearray(16)
 
-def mrh(header: bytearray):
-    return bytes(header[10:13])
+        # Set routing fields
+        header[0:0] = self.message_type
+        header[1:1] = self.network
+        header[2:2] = self.priority
+        header[3:3] = self.frmt
 
-def recipient(header: bytearray):
-    return bytes(header[13:16])
+        # 4 5 6 = reserved
+
+        # Set sender, mrh, recipient
+        header[7:9] = self.sender
+        header[10:12] = self.mrh
+        header[13:15] = self.recipient
+
+        return header
