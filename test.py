@@ -1,7 +1,7 @@
 from constants.globals import NODE_ID, NODE_TYPE
 from constants.nodes import TYPE_NODE
 from meshnet.heartbeat import Heartbeat
-from meshnet.routing import Routing, RoutingEntry
+from meshnet.routing import Routing, RoutingEntry, TIMEOUT_GATEWAY, TIMEOUT_NODE
 from util.debug import dbg
 
 # Initialize Routing
@@ -11,6 +11,6 @@ routing.add(RoutingEntry(b'\x01\x02\x03', TYPE_NODE))
 
 # Create Message
 message = Heartbeat(NODE_ID, NODE_TYPE).create()
-print(message)
+print(message.create())
 
 dbg(message)

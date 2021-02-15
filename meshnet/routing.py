@@ -1,14 +1,14 @@
-from time import time
+from datetime import datetime, timedelta
 
 from constants.nodes import TYPE_GATEWAY, TYPE_NODE, TYPE_NON_ROUTING
 
-TIMEOUT_NODE = 5 * 60 * 1000
-TIMEOUT_GATEWAY = 15 * 60 * 1000
+TIMEOUT_NODE = 5
+TIMEOUT_GATEWAY = 15
 
 class RoutingEntry:
     node_id: bytes
     node_type: bytes
-    expiry: float
+    expiry: datetime
 
     def __init__(self, node_id, node_type) -> None:
         self.node_id = node_id
@@ -17,9 +17,9 @@ class RoutingEntry:
         if (node_type == TYPE_NON_ROUTING):
             raise Exception("Cannot create RoutingEntry for non-routing node")
         elif (node_type == TYPE_NODE):
-            self.expiry = time() + TIMEOUT_NODE
+            self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_NODE)
         elif (node_type == TYPE_GATEWAY):
-            self.expiry = time() + TIMEOUT_GATEWAY
+            self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_GATEWAY)
 
 class Routing:
     # Singleton instance
@@ -43,9 +43,14 @@ class Routing:
         return filter(lambda n: n.node_type == TYPE_GATEWAY, self.neighbors)
     
     def clean(self):
+        neighbors_to_clean = list()
+
         for neighbor in self.neighbors:
-            if (neighbor.expiry < time.time()):
-                self.neighbors.remove(neighbor)
+            if (neighbor.expiry < datetime.now()):
+                neighbors_to_clean.append(neighbor)
+        
+        for neighbor in neighbors_to_clean:
+            self.neighbors.remove(neighbor)
 
     def clear(self):
         self.neighbors = list()

@@ -1,3 +1,7 @@
+from datetime import datetime, timedelta
+from time import sleep
+
+from meshnet.routing import Routing, RoutingEntry
 from constants.headers import (
     FORMAT_RAW, 
     FORMAT_UTF8, 
@@ -35,6 +39,8 @@ def dbg(message: Message):
 
     if (message_type_var == MESSAGE_SYS_HEARTBEAT):
         heartbeat_dbg(content_var)
+    
+    routing_dbg()
 
 def headers_dbg(header: Headers):
     print("# Header Debug #")
@@ -92,11 +98,10 @@ def heartbeat_dbg(message: bytearray):
     heartbeat = Heartbeat().from_bytearray(message)
     print("# Heartbeat Debug #")
     print("ID: {0}".format(heartbeat.node_id))
-    print("Node Type: {0}".format(node_type_dbg(heartbeat)))
+    print("Node Type: {0}".format(node_type_dbg(heartbeat.node_type)))
     print("Neighbors: {0}".format(heartbeat.routes))
 
-def node_type_dbg(heartbeat: Heartbeat):
-    node_type_var = heartbeat.node_type
+def node_type_dbg(node_type_var: bytes):
     if (node_type_var == TYPE_NODE):
         return "Node"
     elif (node_type_var == TYPE_GATEWAY):
@@ -105,3 +110,25 @@ def node_type_dbg(heartbeat: Heartbeat):
         return "SPECIAL - Non-Routing Node"
     else:
         return "Unknown"
+
+def routing_dbg():
+    routing = Routing()
+    
+    print("# Routing Debug #")
+    print_routes(routing.neighbors)
+
+    for neighbor in routing.neighbors:
+        neighbor.expiry = datetime.now() + timedelta(seconds = 5)
+
+    print("Waiting for expiry to clean up...")
+    sleep(5)
+    routing.clean()
+    print("Cleaned up!")
+    
+    print_routes(routing.neighbors)
+
+def print_routes(routes: list[RoutingEntry]):
+    for neighbor in routes:
+        print("ID: {0}, Type: {1}, Expiry: {2}".format(neighbor.node_id, node_type_dbg(neighbor.node_type), neighbor.expiry.strftime("%c")))
+
+
