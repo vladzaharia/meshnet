@@ -77,4 +77,7 @@ class Heartbeat:
         self.timestamp = datetime.fromtimestamp(float(timestamp[0]))
 
 def proccess_heartbeat(heartbeat: Heartbeat):
-    Routing().add(RoutingEntry(heartbeat.node_id, heartbeat.node_type))
+    try:
+        Routing().add(RoutingEntry(heartbeat.node_id, heartbeat.node_type))
+    except Exception:
+        print("Exception while processing heartbeat")

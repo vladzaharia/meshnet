@@ -119,7 +119,7 @@ def routing_dbg():
     
     print()
     print("# Routing Debug #")
-    print_routes(routing.neighbors)
+    print_routes(routing.neighbors)    
 
     for neighbor in routing.neighbors:
         neighbor.expiry = datetime.now() + timedelta(seconds = 5)

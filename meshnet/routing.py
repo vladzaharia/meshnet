@@ -13,14 +13,15 @@ class RoutingEntry:
 
     def __init__(self, node_id: bytes, node_type: NodeType) -> None:
         self.node_id = node_id
-        self.node_type = NodeType(node_type)
-
-        if (node_type == TYPE_NON_ROUTING):
+        self.node_type = node_type
+        if (node_type.node_type == TYPE_NON_ROUTING):
             raise Exception("Cannot create RoutingEntry for non-routing node")
         elif (self.node_type.is_node()):
             self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_NODE)
         elif (self.node_type.is_gateway()):
             self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_GATEWAY)
+        else:
+            self.expiry = datetime.now() + timedelta(seconds = 5)
 
 class Routing:
     # Singleton instance
