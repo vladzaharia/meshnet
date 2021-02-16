@@ -1,3 +1,4 @@
+from constants.headers import FORMAT_UTF8
 from util.headers import Headers
 
 class Message:
@@ -11,6 +12,7 @@ class Message:
     @classmethod
     def from_utf8(self, headers = Headers(), content: str = ""):
         content_as_bytes = bytes(content, "utf-8")
+        headers.frmt = FORMAT_UTF8
         return self(headers, content_as_bytes)
 
     @classmethod

@@ -1,4 +1,4 @@
-from constants.nodetype import TYPE_GATEWAY, TYPE_GATEWAY_TIME, TYPE_NODE, TYPE_NON_ROUTING
+from constants.nodetype import TYPE_GATEWAY, TYPE_GATEWAY_TIME, TYPE_NODE, TYPE_NODE_NR, TYPE_PROVISIONING
 
 class NodeType:
     node_type: bytes
@@ -7,8 +7,11 @@ class NodeType:
         self.node_type = node_type
 
     def is_node(self):
-        return self.node_type == TYPE_NODE
+        return self.node_type == TYPE_NODE or self.node_type == TYPE_NODE_NR
     
+    def is_non_routed(self):
+        return self.node_type == TYPE_NODE_NR or self.node_type == TYPE_PROVISIONING
+
     def is_gateway(self):
         return self.node_type == TYPE_GATEWAY or self.node_type == TYPE_GATEWAY_TIME
 
@@ -18,11 +21,13 @@ class NodeType:
     def to_string(self):
         if (self.node_type == TYPE_NODE):
             return "Node"
+        if (self.node_type == TYPE_NODE_NR):
+            return "Node - Non-Routing"
         elif (self.node_type == TYPE_GATEWAY):
             return "Gateway"
         elif (self.node_type == TYPE_GATEWAY_TIME):
             return "Gateway w/ Auth Time Source"
-        elif (self.node_type == TYPE_NON_ROUTING):
-            return "SPECIAL - Non-Routing Node"
+        elif (self.node_type == TYPE_PROVISIONING):
+            return "SPECIAL - Provisioning"
         else:
             return "Unknown"

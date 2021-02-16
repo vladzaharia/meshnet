@@ -8,10 +8,10 @@ class Headers:
     recipient: bytes
 
     def __init__(self, 
-        message_type: bytes = b'', 
-        network: bytes = b'', 
-        priority: bytes = b'', 
-        frmt: bytes = b'', 
+        message_type: bytes = b'\x00', 
+        network: bytes = b'\x00', 
+        priority: bytes = b'\x00', 
+        frmt: bytes = b'\x00', 
         sender: bytes = b'\x00\x00\x00', 
         mrh: bytes = b'\x00\x00\x00', 
         recipient: bytes = b'\x00\x00\x00'):
@@ -42,6 +42,6 @@ class Headers:
         # Set sender, mrh, recipient
         header[7:10] = self.sender
         header[10:13] = self.mrh
-        header[13:15] = self.recipient
+        header[13:16] = self.recipient
 
         return header

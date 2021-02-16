@@ -20,7 +20,7 @@ from constants.headers import (
 from constants.nodetype import (
     TYPE_GATEWAY, TYPE_GATEWAY_TIME, 
     TYPE_NODE, 
-    TYPE_NON_ROUTING
+    TYPE_PROVISIONING
 )
 from meshnet.heartbeat import Heartbeat
 from util.headers import Headers
