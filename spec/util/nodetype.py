@@ -1,3 +1,5 @@
+import unittest
+
 from constants.nodetype import (
     TYPE_GATEWAY,
     TYPE_GATEWAY_TIME,
@@ -5,8 +7,6 @@ from constants.nodetype import (
     TYPE_NODE_NR,
     TYPE_PROVISIONING
 )
-import unittest
-
 from util.nodetype import NodeType
 
 class NodeTypeTest(unittest.TestCase):
