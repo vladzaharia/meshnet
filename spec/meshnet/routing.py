@@ -30,6 +30,21 @@ class RoutingTest(unittest.TestCase):
         self.assertEqual(self.routing.neighbors[1].node_id, b'\xAE\x32\x92')
         self.assertEqual(self.routing.neighbors[1].node_type.node_type, TYPE_NODE)
 
+    def test_singleton(self):
+        # Setup
+        self.routing.add(RoutingEntry(b'\x87\x18\x91', NodeType(TYPE_NODE)))
+        self.routing.add(RoutingEntry(b'\xAE\x32\x92', NodeType(TYPE_NODE)))
+
+        # Act
+        new_routing = Routing()
+
+        # Assert
+        self.assertEqual(len(new_routing.neighbors), 2)
+        self.assertEqual(new_routing.neighbors[0].node_id, b'\x87\x18\x91')
+        self.assertEqual(new_routing.neighbors[0].node_type.node_type, TYPE_NODE)
+        self.assertEqual(new_routing.neighbors[1].node_id, b'\xAE\x32\x92')
+        self.assertEqual(new_routing.neighbors[1].node_type.node_type, TYPE_NODE)
+
     def test_add_gateway(self):
         # Act
         self.routing.add(RoutingEntry(b'\x17\xF7\x99', NodeType(TYPE_GATEWAY)))

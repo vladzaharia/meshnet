@@ -11,6 +11,7 @@ class SelfTest(unittest.TestCase):
     def setUp(self):
         Self().reset()
 
+    # E2E
     def test_default(self):
         # Assert
         self.assertEqual(Self().node_id, ROUTING_PROVISIONING)
@@ -31,6 +32,7 @@ class SelfTest(unittest.TestCase):
         self.assertEqual(old_self.node_id, new_self.node_id)
         self.assertEqual(old_self.node_type.node_type, new_self.node_type.node_type)
 
+    # Functions
     def test_reset(self):
         # Setup
         Self().node_id = b'\x01\x23\x88'
