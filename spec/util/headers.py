@@ -12,6 +12,7 @@ class HeadersTest(unittest.TestCase):
 
     # E2E
     def test_default(self):
+        # Assert
         self.assertEqual(self.headers.message_type, b'\x00')
         self.assertEqual(self.headers.network, b'\x00')
         self.assertEqual(self.headers.priority, b'\x00')
@@ -19,10 +20,10 @@ class HeadersTest(unittest.TestCase):
         self.assertEqual(self.headers.sender, b'\x00\x00\x00')
         self.assertEqual(self.headers.mrh, b'\x00\x00\x00')
         self.assertEqual(self.headers.recipient, b'\x00\x00\x00')
-
         self.assertEqual(bytes(self.headers.to_bytearray()),b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
 
     def test_change(self):
+        # Setup
         self.headers.message_type = MESSAGE_PROVISION
         self.headers.network = NETWORK_MESH
         self.headers.priority = PRIORITY_HIGH
@@ -31,10 +32,14 @@ class HeadersTest(unittest.TestCase):
         self.headers.mrh = ROUTING_MULTICAST
         self.headers.recipient = b'\x18\xAE\xF8'
 
+        # Act
         bytes = self.headers.to_bytearray()
+
+        # Assert
         self.assertEqual(bytes,b'\xff \x80\x10\x00\x00\x00\x05\x89\xe4\xff\xff\xff\x18\xae\xf8')
 
     def test_reencode(self):
+        # Setup
         self.headers = Headers(MESSAGE_SYS_GPS,
                                 NETWORK_MESH,
                                 PRIORITY_REGULAR,
@@ -43,7 +48,10 @@ class HeadersTest(unittest.TestCase):
                                 ROUTING_MULTICAST,
                                 ROUTING_MULTICAST)
 
+        # Act
         new_headers = Headers().from_bytearray(self.headers.to_bytearray())
+
+        # Assert
         self.assertEqual(new_headers.message_type, MESSAGE_SYS_GPS)
         self.assertEqual(new_headers.network, NETWORK_MESH)
         self.assertEqual(new_headers.priority, PRIORITY_REGULAR)
@@ -54,7 +62,10 @@ class HeadersTest(unittest.TestCase):
 
     # Functions
     def test_from_bytearray(self):
+        # Act
         self.headers = Headers().from_bytearray(bytearray(b'\xff \x80\x10\x00\x00\x00\x05\x89\xe4\xff\xff\xff\x18\xae\xf8'))
+        
+        # Assert
         self.assertEqual(self.headers.message_type, MESSAGE_PROVISION)
         self.assertEqual(self.headers.network, NETWORK_MESH)
         self.assertEqual(self.headers.priority, PRIORITY_HIGH)
@@ -64,6 +75,7 @@ class HeadersTest(unittest.TestCase):
         self.assertEqual(self.headers.recipient, b'\x18\xAE\xF8')
 
     def test_to_bytearray(self):
+        # Setup
         self.headers = Headers(MESSAGE_MESH_CANCEL,
                                 NETWORK_MESH,
                                 PRIORITY_HIGH,
@@ -71,6 +83,8 @@ class HeadersTest(unittest.TestCase):
                                 b'\x83\x23\x09',
                                 ROUTING_MULTICAST,
                                 b'\x12\x29\x29')
+
+        # Act + Assert
         self.assertEqual(self.headers.to_bytearray(), bytearray(b'\xf0 \x80\x00\x00\x00\x00\x83#\t\xff\xff\xff\x12))'))
 
 if __name__ == '__main__': 

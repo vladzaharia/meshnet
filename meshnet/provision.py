@@ -44,7 +44,7 @@ class Provision:
     def provision_node_id(self, node_id: bytes):
         self.operation = OPERATION_SET_NODE_ID
         self.content = node_id
-        message = self.create_message()
+        message: Message = self.create_message()
 
         # Update Node ID for future requests
         self.node_id = node_id
@@ -64,14 +64,14 @@ class Provision:
 
         return self.create_message()
 
-    def create_message(self, operation: bytes, content: bytes):
-        message_len = len(content) + 12
+    def create_message(self):
+        message_len = len(self.content) + 12
         message = bytearray(message_len)
 
-        message[0:1] = operation
+        message[0:1] = self.operation
         # 1 - 3 are reserved
         message[4:12] = ADMIN_TOKEN
-        message[12:] = content
+        message[12:] = self.content
 
         return Message(self.headers, message)
 
