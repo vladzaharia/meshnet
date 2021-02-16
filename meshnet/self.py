@@ -16,3 +16,7 @@ class Self:
             cls.node_id = ROUTING_PROVISIONING
             cls.node_type = NodeType(TYPE_NON_ROUTING)
         return cls._instance
+
+    def reset(self):
+        self.node_id = ROUTING_PROVISIONING
+        self.node_type = NodeType(TYPE_NON_ROUTING)

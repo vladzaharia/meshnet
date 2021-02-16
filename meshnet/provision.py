@@ -9,7 +9,7 @@ from constants.headers import (
 )
 from meshnet.self import Self
 from util.headers import Headers
-from util.message import Mes, Message
+from util.message import Message
 
 # This will need to eventually be more secure
 ADMIN_TOKEN: bytes = b'yufboPkn'

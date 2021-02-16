@@ -54,5 +54,5 @@ class Routing:
         for neighbor in neighbors_to_clean:
             self.neighbors.remove(neighbor)
 
-    def clear(self):
+    def reset(self):
         self.neighbors = list()
