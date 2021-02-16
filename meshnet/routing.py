@@ -39,10 +39,10 @@ class Routing:
         self.neighbors.append(entry)
     
     def node_neighbors(self):
-        return filter(lambda n: n.node_type.is_node(), self.neighbors)
+        return list(filter(lambda n: n.node_type.is_node(), self.neighbors))
 
-    def node_gateways(self):
-        return filter(lambda n: n.node_type.is_gateway(), self.neighbors)
+    def gateway_neighbors(self):
+        return list(filter(lambda n: n.node_type.is_gateway(), self.neighbors))
     
     def clean(self):
         neighbors_to_clean = list()
