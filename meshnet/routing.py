@@ -14,8 +14,8 @@ class RoutingEntry:
     def __init__(self, node_id: bytes, node_type: NodeType) -> None:
         self.node_id = node_id
         self.node_type = node_type
-        if (node_type.node_type == TYPE_PROVISIONING):
-            raise Exception("Cannot create RoutingEntry for non-routing node")
+        if (node_type.is_non_routed()):
+            raise Exception("Cannot create RoutingEntry for non-routed node")
         elif (self.node_type.is_node()):
             self.expiry = datetime.now() + timedelta(minutes = TIMEOUT_NODE)
         elif (self.node_type.is_gateway()):

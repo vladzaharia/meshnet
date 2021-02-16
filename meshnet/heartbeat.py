@@ -76,8 +76,9 @@ class Heartbeat:
         timestamp = struct.unpack(">i", timestamp_raw)
         self.timestamp = datetime.fromtimestamp(float(timestamp[0]))
 
-    def proccess_routes(self):
+    def process(self):
         try:
-            Routing().add(RoutingEntry(self.node_id, self.node_type))
+            if (not self.node_type.is_non_routed()):
+                Routing().add(RoutingEntry(self.node_id, self.node_type))
         except Exception:
             print("Exception while processing heartbeat")

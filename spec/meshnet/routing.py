@@ -7,9 +7,9 @@ class RoutingTest(unittest.TestCase):
     routing = Routing()
 
     def setUp(self):
-        self.routing = Routing()
         Self().reset()
         Routing().reset()
+        self.routing = Routing()
 
     def test_default(self):
         pass

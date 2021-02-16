@@ -8,9 +8,9 @@ class ProvisionTest(unittest.TestCase):
     provision = Provision()
 
     def setUp(self):
-        self.provision = Provision()
         Self().reset()
         Routing().reset()
+        self.provision = Provision()
 
     def test_default(self):
         pass
