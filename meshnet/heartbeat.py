@@ -42,7 +42,7 @@ class Heartbeat:
         return obj
 
     def to_message(self):
-        self.create_routes()
+        self._create_routes()
 
         routes = self.routes
         message_len = len(routes) + 8
@@ -55,7 +55,7 @@ class Heartbeat:
 
         return Message(self.headers, message)
 
-    def create_routes(self):
+    def _create_routes(self):
         routing = Routing()
         neighbors = routing.neighbors
 

@@ -56,7 +56,7 @@ class ProvisionTest(unittest.TestCase):
         # Assert
         self.assertEqual(Self().node_type.node_type, TYPE_GATEWAY)
 
-    def create_message(self):
+    def test_create_message(self):
         pass
 
     def test_process(self):

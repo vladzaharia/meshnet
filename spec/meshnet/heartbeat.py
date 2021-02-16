@@ -43,7 +43,7 @@ class HeartbeatTest(unittest.TestCase):
         self.heartbeat = Heartbeat()
 
         # Act
-        self.heartbeat.create_routes()
+        self.heartbeat._create_routes()
 
         # Assert
         self.assertEqual(len(self.heartbeat.routes), 6)
