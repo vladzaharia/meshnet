@@ -27,7 +27,7 @@ class Headers:
     def from_bytearray(self, raw: bytearray):
         return self(raw[0:1], raw[1:2], raw[2:3], raw[3:4], raw[7:10], raw[10:13], raw[13:16])
 
-    def create(self):
+    def to_bytearray(self):
         header = bytearray(16)
 
         # Set routing fields

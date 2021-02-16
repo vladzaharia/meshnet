@@ -41,7 +41,7 @@ class Heartbeat:
         obj.routes = raw[8:]
         return obj
 
-    def create(self):
+    def to_message(self):
         self.create_routes()
 
         routes = self.routes
@@ -76,8 +76,8 @@ class Heartbeat:
         timestamp = struct.unpack(">i", timestamp_raw)
         self.timestamp = datetime.fromtimestamp(float(timestamp[0]))
 
-def proccess_heartbeat(heartbeat: Heartbeat):
-    try:
-        Routing().add(RoutingEntry(heartbeat.node_id, heartbeat.node_type))
-    except Exception:
-        print("Exception while processing heartbeat")
+    def proccess(self):
+        try:
+            Routing().add(RoutingEntry(self.node_id, self.node_type))
+        except Exception:
+            print("Exception while processing heartbeat")

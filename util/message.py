@@ -19,8 +19,8 @@ class Message:
         content = message[16:]
         return self(headers, content)
 
-    def create(self):
+    def to_bytearray(self):
         message = bytearray(len(self.content) + 16)
-        message[0:15] = self.headers.create()
+        message[0:15] = self.headers.to_bytearray()
         message[16:] = self.content
         return message
