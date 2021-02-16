@@ -31,16 +31,17 @@ class Headers:
         header = bytearray(16)
 
         # Set routing fields
-        header[0:0] = self.message_type
-        header[1:1] = self.network
-        header[2:2] = self.priority
-        header[3:3] = self.frmt
+        header[0:1] = self.message_type
+        header[1:2] = self.network
+        header[2:3] = self.priority
+        header[3:4] = self.frmt
 
         # 4 5 6 = reserved
+        header[4:7] = b'\x00\x00\x00'
 
         # Set sender, mrh, recipient
-        header[7:9] = self.sender
-        header[10:12] = self.mrh
+        header[7:10] = self.sender
+        header[10:13] = self.mrh
         header[13:15] = self.recipient
 
         return header

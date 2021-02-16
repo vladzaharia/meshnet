@@ -1,22 +1,23 @@
-from constants.nodetype import TYPE_GATEWAY, TYPE_NODE
-from meshnet.heartbeat import Heartbeat
-from meshnet.routing import Routing, RoutingEntry
-from util.debug import dbg, routing_dbg
-from util.nodetype import NodeType
+import unittest
 
-# Initialize Routing
-routing = Routing()
-routing.add(RoutingEntry(b'\x01\x01\x03', NodeType(TYPE_NODE)))
-routing.add(RoutingEntry(b'\x01\x02\x03', NodeType(TYPE_GATEWAY)))
+from spec.meshnet.heartbeat import HeartbeatTest
+from spec.meshnet.provision import ProvisionTest
+from spec.meshnet.routing import RoutingTest
+from spec.meshnet.self import SelfTest
+from spec.util.headers import HeadersTest
+from spec.util.message import MessageTest
+from spec.util.nodetype import NodeTypeTest
 
-# Create Message
-message = Heartbeat().to_message()
-print(message.to_bytearray())
+# MeshNet Tests
+HeartbeatTest()
+ProvisionTest()
+RoutingTest()
+SelfTest()
 
-dbg(message)
+# Util Tests
+HeadersTest()
+MessageTest()
+NodeTypeTest()
 
-print("Processing heartbeat")
-heartbeat = Heartbeat().from_bytearray(message.content)
-heartbeat.node_type = NodeType(TYPE_NODE)
-heartbeat.proccess()
-routing_dbg()
+if __name__ == '__main__': 
+    unittest.main() 

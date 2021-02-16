@@ -6,7 +6,7 @@ from meshnet.routing import Routing, RoutingEntry
 from constants.headers import (
     FORMAT_RAW, 
     FORMAT_UTF8, 
-    MESSAGE_MESH_CANCEL, 
+    MESSAGE_MESH_CANCEL, MESSAGE_PROVISION, 
     MESSAGE_SYS_GPS, 
     MESSAGE_SYS_HEARTBEAT, 
     MESSAGE_USR_TEXT, 
@@ -65,6 +65,8 @@ def message_type_dbg(header: Headers):
         return "User - Text"
     elif (message_type_var == MESSAGE_MESH_CANCEL):
         return "Mesh - Cancel relay"
+    elif (message_type_var == MESSAGE_PROVISION):
+        return "Mesh - Provision"
     else:
         return "Unknown"
 
