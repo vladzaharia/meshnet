@@ -1,8 +1,17 @@
 import unittest
 
-from constants.headers import FORMAT_RAW, FORMAT_UTF8, MESSAGE_MESH_CANCEL, MESSAGE_PROVISION, MESSAGE_SYS_GPS, NETWORK_MESH, PRIORITY_HIGH, PRIORITY_REGULAR, ROUTING_MULTICAST
+from constants.headers import (
+    FORMAT_RAW, 
+    FORMAT_UTF8, 
+    MESSAGE_MESH_CANCEL, 
+    MESSAGE_PROVISION, 
+    MESSAGE_SYS_GPS, 
+    NETWORK_MESH, 
+    PRIORITY_HIGH, 
+    PRIORITY_REGULAR, 
+    ROUTING_MULTICAST
+)
 from util.headers import Headers
-from util.debug import headers_dbg
 
 class HeadersTest(unittest.TestCase):
     headers = Headers()

@@ -1,4 +1,10 @@
-from constants.nodetype import TYPE_GATEWAY, TYPE_GATEWAY_TIME, TYPE_NODE, TYPE_NODE_NR, TYPE_PROVISIONING
+from constants.nodetype import (
+    TYPE_GATEWAY, 
+    TYPE_GATEWAY_TIME, 
+    TYPE_NODE, 
+    TYPE_NODE_NR, 
+    TYPE_PROVISIONING
+)
 
 class NodeType:
     node_type: bytes

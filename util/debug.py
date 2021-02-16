@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from time import sleep
-from util.nodetype import NodeType
 
 from meshnet.routing import Routing, RoutingEntry
 from constants.headers import (
@@ -17,14 +16,10 @@ from constants.headers import (
     PRIORITY_REGULAR, 
     PRIORITY_URGENT
 )
-from constants.nodetype import (
-    TYPE_GATEWAY, TYPE_GATEWAY_TIME, 
-    TYPE_NODE, 
-    TYPE_PROVISIONING
-)
 from meshnet.heartbeat import Heartbeat
 from util.headers import Headers
 from util.message import Message
+from util.nodetype import NodeType
 
 def dbg(message: Message):
     headers_var = message.headers

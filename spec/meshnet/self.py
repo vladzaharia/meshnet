@@ -1,9 +1,9 @@
 import unittest
-from util.nodetype import NodeType
 
 from constants.headers import ROUTING_PROVISIONING
 from constants.nodetype import TYPE_NODE, TYPE_PROVISIONING
 from meshnet.self import Self
+from util.nodetype import NodeType
 
 class SelfTest(unittest.TestCase):
     self_obj = Self()
